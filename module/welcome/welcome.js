@@ -9,7 +9,7 @@ class welcomeControler {
     init() {
         changeLevel(this.view.element);
         this.view.startGame = function() {
-            console.log('a');
+            window.location.hash = 'game';
         };
     }
 

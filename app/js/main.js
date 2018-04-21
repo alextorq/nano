@@ -33,6 +33,7 @@ let end;
 
 let URL = {
     'WELCOME': '',
+    'GAME': 'game',
     'END': 'gameover'
 };
 
@@ -42,6 +43,7 @@ class Route {
     constructor() {
         this.routes = {
             [URL.WELCOME]: welcome,
+            [URL.GAME]: game,
             [URL.END]: end
         };
         window.onhashchange = () => {
@@ -86,7 +88,7 @@ class welcomeControler {
     init() {
         changeLevel(this.view.element);
         this.view.startGame = function() {
-            console.log('a');
+            window.location.hash = 'game';
         };
     }
 

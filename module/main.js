@@ -6,6 +6,7 @@ let end;
 
 let URL = {
     'WELCOME': '',
+    'GAME': 'game',
     'END': 'gameover'
 };
 
@@ -15,6 +16,7 @@ class Route {
     constructor() {
         this.routes = {
             [URL.WELCOME]: welcome,
+            [URL.GAME]: game,
             [URL.END]: end
         };
         window.onhashchange = () => {
