@@ -1,0 +1,30 @@
+{
+  "name": "isnano",
+  "version": "1.0.0",
+  "description": "My first game",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "game",
+    "nano",
+    "isnanno",
+    "first"
+  ],
+  "author": "mr.Green",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-sass": "^4.0.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-uglify": "^3.0.0",
+    "gulp-autoprefixer": "^5.0.0",
+    "browserify": "^16.2.0",
+    "gulp-rollup": "^2.16.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "vinyl-source-stream": "^2.0.0",
+    "pubsub-js": "^1.6.0",
+    "browser-sync": "^2.23.6"
+  }
+}
