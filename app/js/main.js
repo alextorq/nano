@@ -125,8 +125,11 @@ class welcomeView {
                 if (value == startComand) {
                     this.startGame();
                 }
-                if (value == endGame) {
+                else if (value == endGame) {
                     this.endGame();
+                }
+                else {
+                    alert('Выберете ответ из доступных вариантов');
                 }
             }
         }.bind(this);
