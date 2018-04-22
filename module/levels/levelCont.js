@@ -5,10 +5,13 @@ let changeLevel = require('../utils/utils');
 class Level {
     constructor() {
         this.view = new levelView();
+        this.view.changeScreen = function(level) {
+            level = levels[level];
+            this.init(level);
+        }.bind(this);
     }
-    init() {
-        this.view.level = levels.level0;
-        console.log(this.view);
+    init(level = levels.level0) {
+        this.view.level = level;
         changeLevel(this.view.element);
     }
 }

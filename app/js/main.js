@@ -22,10 +22,10 @@ let levels = {
         <p>Пытаясь окрыть короб вы заметили выжженную эмблему на одной из сторон</p>
         <p>Она представляла собой щит и терновник</p> 
         `,
-        answers: ['Блыть к берегу', 'Выбрать сеть'],
+        answers: ['Плыть к берегу', 'Выбрать сеть'],
         answersLevel: {
-            '1': 'jail',
-            '2': 'city'
+            '0': 'jail',
+            '1': 'city'
         }
     },
     jail: {
@@ -41,6 +41,11 @@ let levels = {
         <p>Схватить</p>
         <p>И вот вы уже едите в городскую управу</p>
         `,
+        answers: ['Плыть к берегу', 'Выбрать сеть'],
+        answersLevel: {
+            '0': 'jail',
+            '1': 'city'
+        }
     }
 
 };
@@ -63,10 +68,13 @@ let changeLevel = require('../utils/utils');
 class Level {
     constructor() {
         this.view = new levelView();
+        this.view.changeScreen = function(level) {
+            level = levels[level];
+            this.init(level);
+        }.bind(this);
     }
-    init() {
-        this.view.level = levels.level0;
-        console.log(this.view);
+    init(level = levels.level0) {
+        this.view.level = level;
         changeLevel(this.view.element);
     }
 }
@@ -94,28 +102,29 @@ class levelView {
         let input = this._element.querySelector('input');
         input.onkeydown = () => {
             if (event.keyCode == '13') {
-                // let value = event.target.value;
-                // if (value == startComand) {
-                //     this.startGame();
-                // }
-                // else if (value == endGame) {
-                //     this.endGame();
-                // }
-                // else {
-                //     alert('Выберете ответ из доступных вариантов');
-                // }
-                console.log('123');
+                let value = event.target.value;
+                for (let answer of this.modele.answers) {
+                    if (value == answer) {
+                        let number = this.modele.answers.indexOf(value);
+                        let nextLevel = this.modele.answersLevel[number];
+                        console.log();
+                        this.changeScreen(nextLevel);
+                        return
+                    }
+                }
+                alert('Выберете ответ из доступных вариантов');
             }
         }
+    }
+    changeScreen() {
+
     }
     set level(obj) {
         this.modele = obj;
     }
     get element() {
-        if (!this._element) {
-            this.render();
-            this.bind();
-        }
+        this.render();
+        this.bind();
         return this._element;
     }
 }
@@ -150,10 +159,9 @@ class Route {
             this.changeControler(getControlerFromHash(window.location.hash));
         };
     }
-    changeControler(route) {
+    changeControler(route = '') {
         let Controler = this.routes[route];
         new Controler().init();
-        console.log(Controler);
     }
 
     init() {

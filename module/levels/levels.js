@@ -19,28 +19,29 @@ class levelView {
         let input = this._element.querySelector('input');
         input.onkeydown = () => {
             if (event.keyCode == '13') {
-                // let value = event.target.value;
-                // if (value == startComand) {
-                //     this.startGame();
-                // }
-                // else if (value == endGame) {
-                //     this.endGame();
-                // }
-                // else {
-                //     alert('Выберете ответ из доступных вариантов');
-                // }
-                console.log('123');
+                let value = event.target.value;
+                for (let answer of this.modele.answers) {
+                    if (value == answer) {
+                        let number = this.modele.answers.indexOf(value);
+                        let nextLevel = this.modele.answersLevel[number];
+                        console.log();
+                        this.changeScreen(nextLevel);
+                        return
+                    }
+                }
+                alert('Выберете ответ из доступных вариантов');
             }
         }
+    }
+    changeScreen() {
+
     }
     set level(obj) {
         this.modele = obj;
     }
     get element() {
-        if (!this._element) {
-            this.render();
-            this.bind();
-        }
+        this.render();
+        this.bind();
         return this._element;
     }
 }

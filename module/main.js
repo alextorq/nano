@@ -26,10 +26,9 @@ class Route {
             this.changeControler(getControlerFromHash(window.location.hash));
         };
     }
-    changeControler(route) {
+    changeControler(route = '') {
         let Controler = this.routes[route];
         new Controler().init();
-        console.log(Controler);
     }
 
     init() {
