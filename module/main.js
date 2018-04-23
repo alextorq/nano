@@ -15,8 +15,11 @@ let getControlerFromHash = (hash) => {
     return hash;
 };
 
-class Route {
+class App {
     constructor() {
+        this.modele = new Modele();
+    }
+    addRouters() {
         this.routes = {
             [URL.WELCOME]: welcome,
             [URL.GAME]: game,
@@ -37,7 +40,7 @@ class Route {
 }
 
 
-let app = new Route();
+let app = new App();
 app.init();
 
 let head = document.getElementById('head');

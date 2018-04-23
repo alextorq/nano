@@ -14,7 +14,6 @@ gulp.task('browser-sync', function() {
     });
 });
 
-
 gulp.task('sass', function () {
     return gulp.src('./sass/**/*.sass')
         .pipe(sass().on('error', sass.logError))
@@ -38,5 +37,7 @@ gulp.task('browserify', function() {
 gulp.task('watch', function () {
     gulp.watch('./module/**/*.js',['browserify']);
 });
+
+gulp.task('build', ['sass', 'browserify']);
 
 gulp.task('default', ['sass', 'sass:watch', 'browserify', 'watch', 'browser-sync']);
