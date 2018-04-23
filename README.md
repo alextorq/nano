@@ -1,3 +1,9 @@
-#Just my first litle game
+#Just my first little game
 
-#it`s all
+##How to use
+
+Clone this repo and then in command line type:
+
+* `npm install` - install all dependencies
+* `npm build` - build project from sources
+* `npm start` - build project from sources
