@@ -1,8 +1,17 @@
 let welcome = require('./welcome/welcome.js');
 let header = require('./data/header');
-let modele = require('./data/modele.js');
 let game = require('./levels/levelCont.js');
+let makeRequest = require('./utils/');
+
 let end;
+
+let initialState = {
+    status: 'В норме',
+    time: 'Вечер',
+    location: 'Близ городского порта'
+
+};
+
 
 let URL = {
     'WELCOME': '',
@@ -44,5 +53,5 @@ let app = new App();
 app.init();
 
 let head = document.getElementById('head');
-head.appendChild(header(modele));
+head.appendChild(header(initialState));
 

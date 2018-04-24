@@ -11,8 +11,6 @@ let client;
 const levelsUrl = "mongodb://localhost:27017";
 const levelsDatabase = 'levels';
 
-
-
 app.use(express.static(__dirname + "/"));
 
 app.listen(port, () => {

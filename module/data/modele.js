@@ -1,8 +1,7 @@
-let initialState = {
-    status: 'В норме',
-    time: 'Вечер',
-    location: 'Близ городского порта'
+class Modele {
+    constructor() {
 
-};
+    }
 
+}
 module.exports = initialState;
