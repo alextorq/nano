@@ -11,7 +11,6 @@ function makeRequest(date, url) {
             else {
                 console.clear();
                 resolve(this.responseText);
-                console.log(this.responseText);
             }
         };
         request.send(json);

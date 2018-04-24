@@ -27,9 +27,9 @@ app.post("/data", jsonParser, function (request, response) { //Обработк�
         return collection.find().toArray();
     }).
     then((results) => {
-        console.log(results);
         client.close();
-        response.send(results);
+        delete results[0]['_id'];
+        response.send(results[0]);
     }).
     catch((err) => {console.log(err)});
 });

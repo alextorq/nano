@@ -1,7 +1,7 @@
 let welcome = require('./welcome/welcome.js');
 let header = require('./data/header');
 let game = require('./levels/levelCont.js');
-let makeRequest = require('./utils/');
+require('./utils/makeRequest');
 
 let end;
 
@@ -26,7 +26,7 @@ let getControlerFromHash = (hash) => {
 
 class App {
     constructor() {
-        this.modele = new Modele();
+        // this.modele = new Modele();
     }
     addRouters() {
         this.routes = {
@@ -50,6 +50,7 @@ class App {
 
 
 let app = new App();
+app.addRouters();
 app.init();
 
 let head = document.getElementById('head');
