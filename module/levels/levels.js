@@ -24,7 +24,6 @@ class levelView {
                     if (value == answer) {
                         let number = this.modele.answers.indexOf(value);
                         let nextLevel = this.modele.answersLevel[number];
-                        console.log();
                         this.changeScreen(nextLevel);
                         return
                     }

@@ -2,15 +2,12 @@ class Modele {
     constructor() {
 
     }
-    get data() {
+    gettingData() {
         let self = this;
         makeRequest({}, '/data').then((answer) => {
-                self.data = answer;
-            })
-    }
-    set data(object) {
-        this.data = object;
-        this.ready();
+                self.data = JSON.parse(answer);
+                self.ready();
+            });
     }
     ready() {
 

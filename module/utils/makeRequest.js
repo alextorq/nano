@@ -2,6 +2,8 @@ function makeRequest(date, url) {
     return new Promise(function (resolve, reject) {
         let request = new XMLHttpRequest();
         request.open("POST", url, true);
+        request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        request.setRequestHeader('Content-Type', 'application/json');
         let json = JSON.stringify(date);
         request.onreadystatechange = function() { // (3)
             if (request.readyState != 4) return;

@@ -1,16 +1,17 @@
 let levelView = require('./levels');
-let levels = require('../data/levels/levels');
+
 let changeLevel = require('../utils/utils');
 
 class Level {
-    constructor() {
+    constructor(modele) {
+        this.modele = modele;
         this.view = new levelView();
         this.view.changeScreen = function(level) {
-            level = levels[level];
+            level = this.modele[level];
             this.init(level);
         }.bind(this);
     }
-    init(level = levels.level0) {
+    init(level = this.modele.level0) {
         this.view.level = level;
         changeLevel(this.view.element);
     }

@@ -1,6 +1,7 @@
 let welcome = require('./welcome/welcome.js');
 let header = require('./data/header');
 let game = require('./levels/levelCont.js');
+let modele = require('./data/modele');
 require('./utils/makeRequest');
 
 let end;
@@ -11,7 +12,6 @@ let initialState = {
     location: 'Близ городского порта'
 
 };
-
 
 let URL = {
     'WELCOME': '',
@@ -26,7 +26,12 @@ let getControlerFromHash = (hash) => {
 
 class App {
     constructor() {
-        // this.modele = new Modele();
+        this.modele = new modele();
+        this.modele.ready =  () => {
+            this.addRouters();
+
+        };
+        this.modele.gettingData();
     }
     addRouters() {
         this.routes = {
@@ -37,21 +42,16 @@ class App {
         window.onhashchange = () => {
             this.changeControler(getControlerFromHash(window.location.hash));
         };
+        this.changeControler(getControlerFromHash(window.location.hash));
     }
     changeControler(route = '') {
         let Controler = this.routes[route];
-        new Controler().init();
-    }
-
-    init() {
-        this.changeControler(getControlerFromHash(window.location.hash));
+        new Controler(this.modele.data).init();
     }
 }
 
-
 let app = new App();
-app.addRouters();
-app.init();
+
 
 let head = document.getElementById('head');
 head.appendChild(header(initialState));
