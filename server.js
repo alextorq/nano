@@ -38,7 +38,6 @@ app.post("/data", jsonParser, function (request, response) { //Обработк�
 app.post("/user", jsonParser, function (request, response) { //Обработка запроса на адресе
     let client;
     let user = request.body;
-    let fullUrl = request.originalUrl;
 
     mongoClient.connect(levelsUrl).then((clientObj) => {
         client = clientObj;
