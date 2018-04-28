@@ -8,9 +8,9 @@ class levelView {
         div.innerHTML = this.modele.description;
         let input = document.createElement('input');
         div.content.appendChild(input);
-        for (let answer of this.modele.answers) {
+        for (let answer of this.modele.actions) {
             let answerWrapper = document.createElement('p');
-            answerWrapper.innerHTML = answer;
+            answerWrapper.innerHTML = answer.description;
             div.content.appendChild(answerWrapper);
         }
         this._element = div.content;
@@ -20,10 +20,9 @@ class levelView {
         input.onkeydown = () => {
             if (event.keyCode == '13') {
                 let value = event.target.value;
-                for (let answer of this.modele.answers) {
-                    if (value == answer) {
-                        let number = this.modele.answers.indexOf(value);
-                        let nextLevel = this.modele.answersLevel[number];
+                for (let answer of this.modele.actions) {
+                    if (value == answer.description) {
+                        let nextLevel = answer;
                         this.changeScreen(nextLevel);
                         return
                     }
