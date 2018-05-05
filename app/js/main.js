@@ -34,23 +34,16 @@ module.exports = Modele;
 
 },{}],3:[function(require,module,exports){
 let levelView = require('./levels');
-let header           = require('../data/header');
+
 let changeLevel = require('../utils/utils');
-let head = document.getElementById('head');
 
 class Level {
     constructor(modele) {
         this.modele = modele;
         this.view = new levelView();
-        this.view.changeScreen = function(obj) {
-            let level = this.modele[obj.level];
+        this.view.changeScreen = function(level) {
+            level = this.modele[level];
             this.init(level);
-            head.innerHTML ='';
-            head.appendChild(header({
-                status: obj.live,
-                time: obj.time,
-                location: obj.location
-            }));
         }.bind(this);
     }
     init(level = this.modele.level0) {
@@ -60,7 +53,7 @@ class Level {
 }
 
 module.exports = Level;
-},{"../data/header":1,"../utils/utils":7,"./levels":4}],4:[function(require,module,exports){
+},{"../utils/utils":7,"./levels":4}],4:[function(require,module,exports){
 
 class levelView {
     constructor() {
@@ -71,9 +64,9 @@ class levelView {
         div.innerHTML = this.modele.description;
         let input = document.createElement('input');
         div.content.appendChild(input);
-        for (let answer of this.modele.actions) {
+        for (let answer of this.modele.answers) {
             let answerWrapper = document.createElement('p');
-            answerWrapper.innerHTML = answer.description;
+            answerWrapper.innerHTML = answer;
             div.content.appendChild(answerWrapper);
         }
         this._element = div.content;
@@ -83,9 +76,10 @@ class levelView {
         input.onkeydown = () => {
             if (event.keyCode == '13') {
                 let value = event.target.value;
-                for (let answer of this.modele.actions) {
-                    if (value == answer.description) {
-                        let nextLevel = answer;
+                for (let answer of this.modele.answers) {
+                    if (value == answer) {
+                        let number = this.modele.answers.indexOf(value);
+                        let nextLevel = this.modele.answersLevel[number];
                         this.changeScreen(nextLevel);
                         return
                     }
@@ -121,6 +115,7 @@ let initialState = {
     status: 'В норме',
     time: 'Вечер',
     location: 'Близ городского порта'
+
 };
 
 let URL = {

@@ -1,7 +1,6 @@
 const mongoClient    = require('mongodb').MongoClient;
 const levels         = require('./module/data/levels/levels');
 
-
 let client;
 const levelsUrl = "mongodb://localhost:27017";
 const levelsDatabase = 'levels';
@@ -16,10 +15,7 @@ then((clientObj) => {
 then(() => {
     client.close();
 }).
-<<<<<<< HEAD
 catch((err) => {
  console.log(err)
 });
-=======
-catch((err) => {console.log(err)});
->>>>>>> origin/master
+
