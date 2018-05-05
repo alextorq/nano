@@ -15,72 +15,52 @@ let header = (state) => {
 
 module.exports = header;
 },{}],2:[function(require,module,exports){
-let levels = {
-    level0: {
-        description: `
-        <p>При попытке открыть короб вы потерпели неудачу</p>
-        <p>Пытаясь окрыть короб вы заметили выжженную эмблему на одной из сторон</p>
-        <p>Она представляла собой щит и терновник</p> 
-        `,
-        answers: ['Плыть к берегу', 'Выбрать сеть'],
-        answersLevel: {
-            '0': 'jail',
-            '1': 'city'
-        }
-    },
-    jail: {
-        description: `
-        <p>Когда вы приблизилиьс к берегу вы увидели стражу рыскающею по берегу</p>
-        <p>Как только вы подплыли к вам подошел офицер и спросил что вы тут делаете</p>
-        <p>Я рыбак в этих местах полно рыбы</p>
-        <p>И где же твоя сеть?</p>
-        <p>Сегодня удача не на моей стороне и я оставил ее до завтра может что-то и поймается</p>
-        <p>Похоже офицера такой ответ не устроил и он приказал обыскать лодку</p>
-        <p>Один из стражников нашел короб и передал его офицеру</p>
-        <p>Тот взял короб увидел эмблему</p>
-        <p>Схватить</p>
-        <p>И вот вы уже едите в городскую управу</p>
-        `,
-        answers: ['Плыть к берегу', 'Выбрать сеть'],
-        answersLevel: {
-            '0': 'jail',
-            '1': 'city'
-        }
+class Modele {
+    constructor() {
+
     }
+    gettingData() {
+        let self = this;
+        makeRequest({}, '/data').then((answer) => {
+                self.data = JSON.parse(answer);
+                self.ready();
+            });
+    }
+    ready() {
 
-};
-module.exports = levels;
+    }
+}
+module.exports = Modele;
+
 },{}],3:[function(require,module,exports){
-let initialState = {
-    status: 'В норме',
-    time: 'Вечер',
-    location: 'Близ городского порта'
-
-};
-
-module.exports = initialState;
-
-},{}],4:[function(require,module,exports){
 let levelView = require('./levels');
-let levels = require('../data/levels/levels');
+let header           = require('../data/header');
 let changeLevel = require('../utils/utils');
+let head = document.getElementById('head');
 
 class Level {
-    constructor() {
+    constructor(modele) {
+        this.modele = modele;
         this.view = new levelView();
-        this.view.changeScreen = function(level) {
-            level = levels[level];
+        this.view.changeScreen = function(obj) {
+            let level = this.modele[obj.level];
             this.init(level);
+            head.innerHTML ='';
+            head.appendChild(header({
+                status: obj.live,
+                time: obj.time,
+                location: obj.location
+            }));
         }.bind(this);
     }
-    init(level = levels.level0) {
+    init(level = this.modele.level0) {
         this.view.level = level;
         changeLevel(this.view.element);
     }
 }
 
 module.exports = Level;
-},{"../data/levels/levels":2,"../utils/utils":7,"./levels":5}],5:[function(require,module,exports){
+},{"../data/header":1,"../utils/utils":7,"./levels":4}],4:[function(require,module,exports){
 
 class levelView {
     constructor() {
@@ -91,9 +71,9 @@ class levelView {
         div.innerHTML = this.modele.description;
         let input = document.createElement('input');
         div.content.appendChild(input);
-        for (let answer of this.modele.answers) {
+        for (let answer of this.modele.actions) {
             let answerWrapper = document.createElement('p');
-            answerWrapper.innerHTML = answer;
+            answerWrapper.innerHTML = answer.description;
             div.content.appendChild(answerWrapper);
         }
         this._element = div.content;
@@ -103,11 +83,9 @@ class levelView {
         input.onkeydown = () => {
             if (event.keyCode == '13') {
                 let value = event.target.value;
-                for (let answer of this.modele.answers) {
-                    if (value == answer) {
-                        let number = this.modele.answers.indexOf(value);
-                        let nextLevel = this.modele.answersLevel[number];
-                        console.log();
+                for (let answer of this.modele.actions) {
+                    if (value == answer.description) {
+                        let nextLevel = answer;
                         this.changeScreen(nextLevel);
                         return
                     }
@@ -130,12 +108,20 @@ class levelView {
 }
 
 module.exports = levelView;
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 let welcome = require('./welcome/welcome.js');
 let header = require('./data/header');
-let modele = require('./data/modele.js');
 let game = require('./levels/levelCont.js');
+let modele = require('./data/modele');
+require('./utils/makeRequest');
+
 let end;
+
+let initialState = {
+    status: 'В норме',
+    time: 'Вечер',
+    location: 'Близ городского порта'
+};
 
 let URL = {
     'WELCOME': '',
@@ -148,8 +134,16 @@ let getControlerFromHash = (hash) => {
     return hash;
 };
 
-class Route {
+class App {
     constructor() {
+        this.modele = new modele();
+        this.modele.ready =  () => {
+            this.addRouters();
+
+        };
+        this.modele.gettingData();
+    }
+    addRouters() {
         this.routes = {
             [URL.WELCOME]: welcome,
             [URL.GAME]: game,
@@ -158,26 +152,46 @@ class Route {
         window.onhashchange = () => {
             this.changeControler(getControlerFromHash(window.location.hash));
         };
+        this.changeControler(getControlerFromHash(window.location.hash));
     }
     changeControler(route = '') {
         let Controler = this.routes[route];
-        new Controler().init();
-    }
-
-    init() {
-        this.changeControler(getControlerFromHash(window.location.hash));
+        new Controler(this.modele.data).init();
     }
 }
 
+let app = new App();
 
-let app = new Route();
-app.init();
 
 let head = document.getElementById('head');
-head.appendChild(header(modele));
+head.appendChild(header(initialState));
 
 
-},{"./data/header":1,"./data/modele.js":3,"./levels/levelCont.js":4,"./welcome/welcome.js":8}],7:[function(require,module,exports){
+},{"./data/header":1,"./data/modele":2,"./levels/levelCont.js":3,"./utils/makeRequest":6,"./welcome/welcome.js":8}],6:[function(require,module,exports){
+(function (global){
+function makeRequest(date, url) {
+    return new Promise(function (resolve, reject) {
+        let request = new XMLHttpRequest();
+        request.open("POST", url, true);
+        request.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+        request.setRequestHeader('Content-Type', 'application/json');
+        let json = JSON.stringify(date);
+        request.onreadystatechange = function() { // (3)
+            if (request.readyState != 4) return;
+            if (request.status != 200) {
+                reject(request.status);
+            }
+            else {
+                console.clear();
+                resolve(this.responseText);
+            }
+        };
+        request.send(json);
+    })
+}
+global.makeRequest = makeRequest;
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],7:[function(require,module,exports){
 let container = document.querySelector('#main');
 function changeLevel (template) {
     container.innerHTML = '';
@@ -205,7 +219,7 @@ class welcomeControler {
 
 
 module.exports = welcomeControler;
-},{"../data/modele":3,"../utils/utils":7,"./welcomeView":9}],9:[function(require,module,exports){
+},{"../data/modele":2,"../utils/utils":7,"./welcomeView":9}],9:[function(require,module,exports){
 let startComand = 'Попытатся открыть';
 let endGame = 'Выбросить';
 
@@ -266,4 +280,4 @@ class welcomeView {
 }
 module.exports = welcomeView;
 
-},{}]},{},[6]);
+},{}]},{},[5]);
